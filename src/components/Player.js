@@ -11,6 +11,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import '../styles/styles.css';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import PlayerFilterForm from '../containers/PlayerFilterFormContainer';
+import * as utils from '../utils/utils';
 
 
 const styles = theme => ({
@@ -28,13 +32,36 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
   table: {
-    minWidth: 700,
+    fontFamily: theme.typography.fontFamily,
+  },
+  flexContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+  },
+  tableRow: {
+    cursor: 'pointer',
+  },
+  tableRowHover: {
+    '&:hover': {
+      backgroundColor: theme.palette.grey[200],
+    },
+  },
+  tableCell: {
+    flex: 1,
+  },
+  noClick: {
+    cursor: 'initial',
   },
   row: {
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default,
     },
   },
+  progress: {
+    margin: theme.spacing.unit * 2,
+    backgroundColor: 'red'
+  }
 });
 
 
@@ -47,18 +74,18 @@ class Player extends Component {
       selectedPosition: ''
     },
     this.renderPositionItems = this.renderPositionItems.bind(this);
+    this.renderPlayerItems = this.renderPlayerItems.bind(this);
+    this.findPlayers = this.findPlayers.bind(this);
   }
 
   componentDidMount () {
-    this.props.getPlayers();
-    
+    this.props.getPlayers();   
   }
 
   renderPositionItems () {
-    return this.props.positions.map(position => {
-      console.log('POSITION VALUE: ', position);
+    return this.props.positions.map((position, index) => {
       return(
-        <MenuItem value={position}>
+        <MenuItem value={position} key={index}>
           <p>{position}</p>
         </MenuItem>
       )
@@ -67,7 +94,6 @@ class Player extends Component {
 
   renderPlayerItems () {
     return this.props.players.map(position => {
-      console.log('POSITION VALUE: ', position);
       return(
         <Grid item md={12} xs={12}>
           <p>{position}</p>
@@ -76,66 +102,68 @@ class Player extends Component {
     })
   }
   
+  
+
+  findPlayers() {
+    this.props.findPlayers();
+  }
+
 
   render() {
     const CustomTableCell = withStyles(theme => ({
       head: {
-        backgroundColor: theme.palette.common.black,
+        backgroundColor: 'steelblue',
         color: theme.palette.common.white,
       },
       body: {
         fontSize: 14,
       },
     }))(TableCell);
+
+    if(this.props.isGetPlayersInProgress) {
+      return (
+        <CircularProgress className='CSSDemo' />
+      )
+    }
+
     return (
-
-
-      <Grid container spacing={24} md={10} alignContent='center' alignItems='space-around'>
-        <Grid item md={12}>
-          <Paper className={styles.paper}>Football Player Finder</Paper>
-        </Grid>
-        <Grid item md={4} xs={6}>
-          <TextField id="playerName" placeholder='Player Name' inputProps={{step: 300}} />
-        </Grid>
-        <Grid item md={4} xs={6}>
-          <TextField id="playerAge" type ='number' placeholder='Player Age'  />
-        </Grid>
-        <Grid item md={2} xs={6}>
-          <Select value={this.state.selectedPosition}>
-            {this.renderPositionItems()}
-          </Select>
-        </Grid>
-        <Grid item md={2} xs={6}>
-          <Button variant="contained" color="primary" className={styles.button}>
-            Search
-          </Button>
-        </Grid>
-        <Grid container md={12} xs={12}>
-          <Table className={styles.table}>
-            <TableHead>
-              <TableRow>
-                <CustomTableCell>Dessert (100g serving)</CustomTableCell>
-                <CustomTableCell align="right">Calories</CustomTableCell>
-                <CustomTableCell align="right">Fat (g)</CustomTableCell>
-                <CustomTableCell align="right">Carbs (g)</CustomTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.players.map((row, index) => (
-                <TableRow className={styles.row} key={row.id} key={index}>
-                  <CustomTableCell component="th" scope="row">
-                    {row.name}
-                  </CustomTableCell>
-                  <CustomTableCell align="right">{row.position}</CustomTableCell>
-                  <CustomTableCell align="right">{row.dateOfBirth}</CustomTableCell>
-                  <CustomTableCell align="right">{row.nationality}</CustomTableCell>
+      <div>
+        <Grid alignItems="center"
+        justify="center" container spacing={24}
+          alignContent='center'>
+          <Grid item md={10}>
+            <Paper className={styles.paper}>Football Player Finder</Paper>
+          </Grid>
+          <Grid item md={10}>
+              <PlayerFilterForm />
+          </Grid>
+          
+          <Grid container>
+            <Table className='tablePlayers'>
+              <TableHead>
+                <TableRow>
+                  <CustomTableCell>Player</CustomTableCell>
+                  <CustomTableCell align="right">Position</CustomTableCell>
+                  <CustomTableCell align="right">Team</CustomTableCell>
+                  <CustomTableCell align="right">Age</CustomTableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {this.props.playersFiltered.map((row, index) => (
+                  <TableRow className={this.props.classes.row} key={index} >
+                    <CustomTableCell component="th" scope="row">
+                      {row.name}
+                    </CustomTableCell>
+                    <CustomTableCell align="right">{row.position}</CustomTableCell>
+                    <CustomTableCell align="right">{row.dateOfBirth}</CustomTableCell>
+                    <CustomTableCell align="right">{utils.getAge(row.dateOfBirth)}</CustomTableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Grid>
         </Grid>
-        <Grid></Grid>
-      </Grid>
+      </div>
 
 /*
           <section>
@@ -154,4 +182,4 @@ class Player extends Component {
   }
 }
 
-export default Player;
+export default withStyles(styles)(Player);

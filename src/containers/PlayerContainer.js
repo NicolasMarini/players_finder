@@ -2,11 +2,11 @@
 import Player from '../components/Player';
 import * as playerAction from '../actions/playerAction';
 import { connect } from 'react-redux';
-import { getPlayers, isGetPlayersInProgress, getPositions } from '../reducers/playerReducer';
+import { isGetPlayersInProgress, getPositions, getPlayersFiltered } from '../reducers/playerReducer';
 
 const mapStateToProps = state => {
   return {
-    players: getPlayers(state),
+    playersFiltered: getPlayersFiltered(state),
     isGetPlayersInProgress: isGetPlayersInProgress(state),
     positions: getPositions(state)
     
@@ -15,7 +15,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getPlayers: () => dispatch(playerAction.getPlayers())
+    getPlayers: () => dispatch(playerAction.getPlayers()),
+    findPlayers: (name, position, age) => dispatch(playerAction.findPlayers())
   };
 };
 
