@@ -93,12 +93,18 @@ class PlayerFilterForm extends Component {
           <TextField id="playerName" placeholder='Player Name' fullWidth variant="outlined"
             inputProps={{step: 300}} value={this.props.playerNameFilter}
             onChange={event => this.updateNameFilter(event.target.value)} />
+            { this.state.showNameError ?
+              <p id="playerNameError"> Sólo se pueden ingresar letras </p>: null
+            }
         </Grid>
         <Grid item md={2} sm={2} xs={12}>
           <TextField id="playerAge" type ='number' placeholder='Age' fullWidth variant="outlined"
             value={this.props.playerAgeFilter}
             onChange={event => this.updateAgeFilter(event.target.value)}
           />
+          { this.state.showAgeError ?
+            <p id="playerNameError"> Debe ser entre 18 y 40 </p>: null
+          }
         </Grid>
         <Grid item md={2} sm={3} xs={12}>
           <Select onChange={this.handlePositionChange}
@@ -129,16 +135,6 @@ class PlayerFilterForm extends Component {
             </div>
           </Grid>
         </Grid>  
-        <Grid item md={3} sm={3} xs={12}>
-        { this.state.showNameError ?
-          <p id="playerNameError"> Sólo se pueden ingresar letras </p>: null
-        }
-        </Grid>
-        <Grid item md={3} sm={3} xs={12}>
-        { this.state.showAgeError ?
-          <p id="playerNameError"> Debe ser entre 18 y 40 </p>: null
-        }
-        </Grid>
       </Grid>
     )
   }
