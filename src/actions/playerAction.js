@@ -17,6 +17,11 @@ export const getPlayers = () => {
       dispatch({
         type: actionTypes.GET_PLAYERS_FAILURE
       });
+      dispatch({
+        type: actionTypes.OPEN_ERROR_DIALOG,
+        openDialog: true,
+        message: 'Ocurrió un error al intentar obtener el listado de jugadores'
+      });
     }
   };
 };
@@ -93,3 +98,12 @@ export const resetFilters = () => {
   }
 };
 
+export const openDialog = (bool, message) => {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.OPEN_ERROR_DIALOG,
+      openDialog: bool,
+      message: message
+    });
+  }
+};

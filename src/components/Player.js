@@ -15,6 +15,11 @@ import '../styles/styles.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PlayerFilterForm from '../containers/PlayerFilterFormContainer';
 import * as utils from '../utils/utils';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import ErrorDialog from '../containers/ErrorDialogContainer';
+
 
 
 const styles = theme => ({
@@ -75,7 +80,6 @@ class Player extends Component {
     },
     this.renderPositionItems = this.renderPositionItems.bind(this);
     this.renderPlayerItems = this.renderPlayerItems.bind(this);
-    this.findPlayers = this.findPlayers.bind(this);
   }
 
   componentDidMount () {
@@ -102,12 +106,6 @@ class Player extends Component {
     })
   }
   
-  
-
-  findPlayers() {
-    this.props.findPlayers();
-  }
-
 
   render() {
     const CustomTableCell = withStyles(theme => ({
@@ -131,34 +129,42 @@ class Player extends Component {
         <Grid alignItems="center"
         justify="center" container spacing={24}
           alignContent='center'>
-          <Grid item md={10}>
-            <Paper className={styles.paper}>Football Player Finder</Paper>
+          <Grid item md={10} sm={10} xs={12}>
+            <AppBar className='noShadow' position="static" color="default" elevation='0.0'>
+              <Toolbar>
+                <Typography variant="h6" color="inherit">
+                  Football Player Finder
+                </Typography>
+              </Toolbar>
+            </AppBar>
           </Grid>
-          <Grid item md={10}>
-              <PlayerFilterForm />
+          <Grid item md={10} sm={10} xs={12}>
+            <PlayerFilterForm />
           </Grid>
-          
-          <Grid container>
+          <Grid item md={10} sm={10} xs={12}>
             <Table className='tablePlayers'>
               <TableHead>
                 <TableRow>
                   <CustomTableCell>Player</CustomTableCell>
                   <CustomTableCell align="right">Position</CustomTableCell>
-                  <CustomTableCell align="right">Team</CustomTableCell>
+                  <CustomTableCell align="right">Nationality</CustomTableCell>
                   <CustomTableCell align="right">Age</CustomTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.props.playersFiltered.map((row, index) => (
+                {this.props.playersFiltered && this.props.playersFiltered.length > 0 ? 
+                  this.props.playersFiltered.map((row, index) => (
                   <TableRow className={this.props.classes.row} key={index} >
-                    <CustomTableCell component="th" scope="row">
-                      {row.name}
-                    </CustomTableCell>
+                    <CustomTableCell component="th" scope="row"> {row.name}</CustomTableCell>
                     <CustomTableCell align="right">{row.position}</CustomTableCell>
-                    <CustomTableCell align="right">{row.dateOfBirth}</CustomTableCell>
+                    <CustomTableCell align="right">{row.nationality}</CustomTableCell>
                     <CustomTableCell align="right">{utils.getAge(row.dateOfBirth)}</CustomTableCell>
                   </TableRow>
-                ))}
+                )) :
+                <div>
+                  <ErrorDialog />
+                </div>
+              }
               </TableBody>
             </Table>
           </Grid>

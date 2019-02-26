@@ -25,7 +25,8 @@ const initialState = {
     playerPosition: '',
     playerAge: '',
   },
-  //selectedPosition: ''
+  openErrorDialog: false,
+  errorMessage: ''
 };
 
 
@@ -69,6 +70,9 @@ export const getSelectedPosition = createSelector([positionSelectedSelector], po
 });
 
 export const isGetPlayersInProgress = state => state.player.isGetPlayersInProgress;
+export const openErrorDialog = state => state.player.openErrorDialog;
+export const getErrorMessage = state => state.player.errorMessage;
+
 
 const playerReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -132,7 +136,12 @@ const playerReducer = (state = initialState, action) => {
           playerAge: ''
         }
       });
-      
+    case actionTypes.OPEN_ERROR_DIALOG:
+      return {
+        ...state,
+        openErrorDialog: action.openDialog,
+        errorMessage: action.message
+      };
     default: return state;
   }
 };

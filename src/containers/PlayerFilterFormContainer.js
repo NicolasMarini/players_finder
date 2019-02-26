@@ -1,4 +1,3 @@
-
 import PlayerFilterForm from '../components/PlayerFilterForm';
 import * as playerAction from '../actions/playerAction';
 import { connect } from 'react-redux';
