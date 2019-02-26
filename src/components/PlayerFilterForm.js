@@ -59,6 +59,8 @@ class PlayerFilterForm extends Component {
 
   resetFilters() {
     this.props.resetFilters();
+    this.setState({showNameError: false});
+    this.setState({showAgeError: false});
   }
 
   updateNameFilter(name) {
@@ -123,8 +125,8 @@ class PlayerFilterForm extends Component {
             {this.renderPositionItems()}
           </Select>
         </Grid>
-        <Grid item md={4} sm={4} xs={12} direction='row' alignContent='space-between'>
-          <Grid container direction='row' alignContent='space-between' >
+        <Grid item md={4} sm={4} xs={12}>
+          <Grid container>
           <Button size="small" variant="outlined" onClick={this.findPlayers} color="primary">
               Search
             </Button>
