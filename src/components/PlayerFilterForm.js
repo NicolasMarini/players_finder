@@ -88,14 +88,14 @@ class PlayerFilterForm extends Component {
 
   render() {
     return(
-      <Grid container direction='row' spacing={24} className={styles.s}>
+      <Grid container direction='row' spacing={16} className={styles.s}>
         <Grid item md={3} sm={3} xs={12}>
           <TextField id="playerName" placeholder='Player Name' fullWidth variant="outlined"
             inputProps={{step: 300}} value={this.props.playerNameFilter}
             onChange={event => this.updateNameFilter(event.target.value)} />
         </Grid>
-        <Grid item md={2} sm={3} xs={12}>
-          <TextField id="playerAge" type ='number' placeholder='Player Age' fullWidth variant="outlined"
+        <Grid item md={2} sm={2} xs={12}>
+          <TextField id="playerAge" type ='number' placeholder='Age' fullWidth variant="outlined"
             value={this.props.playerAgeFilter}
             onChange={event => this.updateAgeFilter(event.target.value)}
           />
@@ -117,15 +117,17 @@ class PlayerFilterForm extends Component {
             {this.renderPositionItems()}
           </Select>
         </Grid>
-        <Grid item md={3} sm={3} xs={12} direction='row' alignContent='space-between'>
-        <Grid container direction='row' alignContent='space-between'>
-        <Button size="small" variant="outlined" onClick={this.findPlayers} color="primary" className={styles.button}>
-            Search
-          </Button>
-          <Button size="small" variant="outlined"  onClick={this.resetFilters} color="secondary" className={[styles.button, styles.removeFiltersButton]}>
-            Reset Filters
-          </Button>
-        </Grid>
+        <Grid item md={4} sm={4} xs={12} direction='row' alignContent='space-between'>
+          <Grid container direction='row' alignContent='space-between' >
+          <Button size="small" variant="outlined" onClick={this.findPlayers} color="primary">
+              Search
+            </Button>
+            <div className='lala'>
+            <Button size="small" variant="outlined"  onClick={this.resetFilters} color="secondary">
+              Reset Filters
+            </Button>
+            </div>
+          </Grid>
         </Grid>  
         <Grid item md={3} sm={3} xs={12}>
         { this.state.showNameError ?
