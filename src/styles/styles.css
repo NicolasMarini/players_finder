@@ -1,6 +1,13 @@
-.CSSDemo {
+.pageContainer {
+  margin-top: 20px;
+}
+.s{
+  background-color: red
+}
+
+.spinner {
   margin-left: 50%;
 }
-.lala {
+.left {
   padding-left: 10px !important;
 }

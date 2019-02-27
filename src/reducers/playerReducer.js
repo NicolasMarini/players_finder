@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import * as actionTypes from '../actions/ActionTypes';
+import * as actionTypes from '../ActionTypes';
 
 const positions = [
   'Attacking Midfield',

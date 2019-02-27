@@ -1,36 +1,27 @@
 import PlayerService from '../services/PlayerService';
-import * as actionTypes from './ActionTypes';
+import * as actionTypes from '../ActionTypes';
 import * as playerReducer from '../reducers/playerReducer';
 import * as utils from '../utils/utils';
+import * as actionCreators from '../actionCreators';
 
 
 export const getPlayers = () => {
   return async (dispatch) => {
     try {
-      dispatch({
-        type: actionTypes.GET_PLAYERS_IN_PROGRESS
-      });
+      dispatch(actionCreators.getPlayersInProgress());
       let players = await PlayerService.getPlayers();
       dispatch(getPlayersSuccess(players.data));      
     }
     catch (err) {
-      dispatch({
-        type: actionTypes.GET_PLAYERS_FAILURE
-      });
-      dispatch({
-        type: actionTypes.OPEN_ERROR_DIALOG,
-        openDialog: true,
-        message: 'Ocurrió un error al intentar obtener el listado de jugadores'
-      });
+      dispatch(actionCreators.getPlayersFailure());
+      dispatch(actionCreators.openErrorDialog(true, `Ocurrió un 
+                error al intentar obtener el listado de jugadores`));
     }
   };
 };
 
 const getPlayersSuccess = (players) => {
-  return {
-    type: actionTypes.GET_PLAYERS_SUCCESS,
-    players: players
-  };
+  return actionCreators.getPlayersSuccess(players);
 };
 
 export const findPlayers = (name, position, age) => {
@@ -38,7 +29,7 @@ export const findPlayers = (name, position, age) => {
     let players = playerReducer.getPlayers(getState());
     if(name) {
       players = players.filter(player => {
-        return player.name.includes(name);
+        return player.name.toLowerCase().includes(name.toLowerCase());
       });
     }
     if(position) {
@@ -57,53 +48,34 @@ export const findPlayers = (name, position, age) => {
 };
 
 const findPlayersSuccess = (players) => {
-  return {
-    type: actionTypes.FIND_PLAYERS_SUCCESS,
-    playersFiltered: players
-  };
+  return actionCreators.findPlayersSuccess(players);
 };
 
 export const selectPosition = (position) => {
-  return {
-    type: actionTypes.SELECT_POSITION,
-    position: position
-  };
+  return actionCreators.selectPosition(position);
 };
 
 export const updateNameFilter = (name) => {
-  return {
-    type: actionTypes.UPDATE_NAME_FILTER,
-    nameFilter: name
-  };
+  return actionCreators.updateNameFilter(name);
 };
 
 export const updatePositionFilter = (position) => {
-  return {
-    type: actionTypes.UPDATE_POSITION_FILTER,
-    positionFilter: position
-  };
+  return actionCreators.updatePositionFilter(position);
 };
 
 export const updateAgeFilter = (age) => {
-  return {
-    type: actionTypes.UPDATE_AGE_FILTER,
-    ageFilter: age
-  };
+  return actionCreators.updateAgeFilter(age);
 };
 
 export const resetFilters = () => {
   return async (dispatch) => {
-    dispatch({type: actionTypes.RESET_FILTERS});
+    dispatch(actionCreators.resetFilters());
     dispatch(findPlayers());
   }
 };
 
 export const openDialog = (bool, message) => {
   return async (dispatch) => {
-    dispatch({
-      type: actionTypes.OPEN_ERROR_DIALOG,
-      openDialog: bool,
-      message: message
-    });
+    dispatch(actionCreators.openErrorDialog(bool, message));
   }
 };

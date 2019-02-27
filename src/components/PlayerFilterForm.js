@@ -3,18 +3,9 @@ import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 
-
-
-const styles = theme => ({
-  button: {
-    margin: theme.spacing.unit,
-  },
-  s: {backgroundColor:'red'}
-});
 
 
 class PlayerFilterForm extends Component {
@@ -23,7 +14,8 @@ class PlayerFilterForm extends Component {
     super();
     this.state = {
       showNameError: false,
-      showAgeError: false
+      showAgeError: false,
+      showInvalidAgeError: false
     }
     this.renderPositionItems = this.renderPositionItems.bind(this);
     this.handlePositionChange = this.handlePositionChange.bind(this);
@@ -45,7 +37,6 @@ class PlayerFilterForm extends Component {
   }
 
   handlePositionChange = event => {
-    console.log('item selected: ', event.target.value);
     this.props.selectPosition(event.target.value);
   };
 
@@ -79,18 +70,27 @@ class PlayerFilterForm extends Component {
   }
 
   updateAgeFilter(age) {
+    let pattern = /^[0-9]*$/;
     this.props.updateAgeFilter(age);
-    if(age !== '' && (age < 18 || age > 40)) {
-      this.setState({showAgeError: true});
-    } else {
-      this.setState({showAgeError: false});
+    if(age.length > 0) {
+      if(age.match(pattern)) {
+        this.setState({showInvalidAgeError: false});
+        if(age !== '' && (age < 18 || age > 40)) {
+          this.setState({showAgeError: true})
+        } else {
+          this.setState({showAgeError: false});
+        }
+      } else { this.setState({showInvalidAgeError: true}); }
+    } else { 
+      this.setState({showAgeError: false}); 
+      this.setState({showInvalidAgeError: false}); 
     }
   }
 
 
   render() {
     return(
-      <Grid container direction='row' spacing={16} className={styles.s}>
+      <Grid container direction='row' spacing={16}>
         <Grid item md={3} sm={3} xs={12}>
           <TextField id="playerName" placeholder='Player Name' fullWidth variant="outlined"
             inputProps={{step: 300}} value={this.props.playerNameFilter}
@@ -100,12 +100,15 @@ class PlayerFilterForm extends Component {
             }
         </Grid>
         <Grid item md={2} sm={2} xs={12}>
-          <TextField id="playerAge" type ='number' placeholder='Age' fullWidth variant="outlined"
+          <TextField id="playerAge" type ='text' placeholder='Age' fullWidth variant="outlined"
             value={this.props.playerAgeFilter}
             onChange={event => this.updateAgeFilter(event.target.value)}
           />
           { this.state.showAgeError ?
             <p id="playerNameError"> Debe ser entre 18 y 40 </p>: null
+          }
+          { this.state.showInvalidAgeError ?
+            <p id="playerNameError"> Edad no válida </p>: null
           }
         </Grid>
         <Grid item md={2} sm={3} xs={12}>
@@ -130,7 +133,7 @@ class PlayerFilterForm extends Component {
           <Button size="small" variant="outlined" onClick={this.findPlayers} color="primary">
               Search
             </Button>
-            <div className='lala'>
+            <div className='left'>
             <Button size="small" variant="outlined"  onClick={this.resetFilters} color="secondary">
               Reset Filters
             </Button>
@@ -142,4 +145,4 @@ class PlayerFilterForm extends Component {
   }
 }
 
-export default withStyles(styles)(PlayerFilterForm);
+export default (PlayerFilterForm);

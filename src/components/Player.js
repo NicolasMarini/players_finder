@@ -23,49 +23,11 @@ import ErrorDialog from '../containers/ErrorDialogContainer';
 
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    height: 140,
-    width: 100,
-  },
-  control: {
-    padding: theme.spacing.unit * 2,
-  },
-  button: {
-    margin: theme.spacing.unit,
-  },
-  table: {
-    fontFamily: theme.typography.fontFamily,
-  },
-  flexContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-  },
-  tableRow: {
-    cursor: 'pointer',
-  },
-  tableRowHover: {
-    '&:hover': {
-      backgroundColor: theme.palette.grey[200],
-    },
-  },
-  tableCell: {
-    flex: 1,
-  },
-  noClick: {
-    cursor: 'initial',
-  },
+ 
   row: {
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default,
     },
-  },
-  progress: {
-    margin: theme.spacing.unit * 2,
-    backgroundColor: 'red'
   }
 });
 
@@ -120,12 +82,13 @@ class Player extends Component {
 
     if(this.props.isGetPlayersInProgress) {
       return (
-        <CircularProgress className='CSSDemo' />
+        <CircularProgress className='spinner' />
       )
     }
 
     return (
-      <div>
+      <div className='pageContainer'>
+        <ErrorDialog />
         <Grid alignItems="center"
         justify="center" container spacing={24}
           alignContent='center'>
@@ -162,7 +125,7 @@ class Player extends Component {
                   </TableRow>
                 )) :
                 <div>
-                  <ErrorDialog />
+                  <p>No hay resultados para mostrar</p>
                 </div>
               }
               </TableBody>
